@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package parcel;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "tracking.proto";
+
+option java_package = "com.godeltech.grpc.parcel";
+option java_multiple_files = true;
+
+message Parcel {
+  double weight = 1;
+  double length = 2;
+  double width = 3;
+  double height = 4;
+  string destination = 5;
+}
+
+message CreateParcelRequest {
+  Parcel parcel = 1;
+  string user_email = 2;
+}
+
+message GetParcelRequest {
+  string track_number = 1;
+}
+
+message DeleteParcelRequest {
+  string track_number = 1;
+}
+
+message UpdateParcelRequest {
+  string track_number = 1;
+  Parcel parcel = 2;
+}
+
+message UpdateParcelStatusRequest {
+  string track_number = 1;
+  TrackingStatus new_status = 2;
+  string user_email = 3;
+}
+
+message GetTrackingDataRequest {
+  string track_number = 1;
+}
+
+message TrackingDataResponse {
+  repeated TrackingData tracking_data = 1;
+}
+
+service ParcelService {
+  rpc CreateParcel(CreateParcelRequest) returns (Tracking);
+  rpc GetParcel(GetParcelRequest) returns (Parcel);
+  rpc DeleteParcel(DeleteParcelRequest) returns (google.protobuf.Empty);
+  rpc UpdateParcel(UpdateParcelRequest) returns (Parcel);
+  rpc UpdateParcelStatus(UpdateParcelStatusRequest) returns (Parcel);
+  rpc GetTracking(GetTrackingDataRequest) returns (TrackingDataResponse);
+}
+
+
