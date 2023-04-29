@@ -4,58 +4,68 @@ package parcel;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "tracking.proto";
 
 option java_package = "com.godeltech.grpc.parcel";
 option java_multiple_files = true;
 
-message Parcel {
+message ParcelDto {
+  string tracking_number = 1;
+  double weight = 2;
+  double length = 3;
+  double width = 4;
+  double height = 5;
+  string destination = 6;
+  uint64 user_id = 7;
+}
+
+enum TrackingStatus {
+  REGISTERED = 0;
+  IN_PROGRESS = 1;
+  DELIVERED = 2;
+  CANCELLED = 3;
+}
+
+message TrackingDataDto {
+  string tracking_number = 1;
+  repeated TrackingStampDto tracking_data = 2;
+}
+
+message TrackingStampDto {
+  TrackingStatus tracking_status = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message TrackingNumberDto {
+  string tracking_number = 1;
+}
+
+message CreateParcelRequest {
   double weight = 1;
   double length = 2;
   double width = 3;
   double height = 4;
   string destination = 5;
+  uint64 user_id = 6;
 }
 
-message CreateParcelRequest {
-  Parcel parcel = 1;
-  string user_email = 2;
-}
-
-message GetParcelRequest {
-  string track_number = 1;
-}
-
-message DeleteParcelRequest {
-  string track_number = 1;
-}
-
-message UpdateParcelRequest {
-  string track_number = 1;
-  Parcel parcel = 2;
-}
-
-message UpdateParcelStatusRequest {
-  string track_number = 1;
+message UpdateTrackingStatusRequest {
+  string tracking_number = 1;
   TrackingStatus new_status = 2;
-  string user_email = 3;
 }
 
-message GetTrackingDataRequest {
-  string track_number = 1;
-}
-
-message TrackingDataResponse {
-  repeated TrackingData tracking_data = 1;
+message FindAllResponse {
+  repeated ParcelDto parcelDtoList = 1;
 }
 
 service ParcelService {
-  rpc CreateParcel(CreateParcelRequest) returns (Tracking);
-  rpc GetParcel(GetParcelRequest) returns (Parcel);
-  rpc DeleteParcel(DeleteParcelRequest) returns (google.protobuf.Empty);
-  rpc UpdateParcel(UpdateParcelRequest) returns (Parcel);
-  rpc UpdateParcelStatus(UpdateParcelStatusRequest) returns (Parcel);
-  rpc GetTracking(GetTrackingDataRequest) returns (TrackingDataResponse);
+  rpc Create(CreateParcelRequest) returns (ParcelDto);
+  rpc FindByTrackingNumber(TrackingNumberDto) returns (ParcelDto);
+  rpc Delete(TrackingNumberDto) returns (google.protobuf.Empty);
+  rpc Cancel(TrackingNumberDto) returns (google.protobuf.Empty);
+  rpc Update(ParcelDto) returns (ParcelDto);
+  rpc UpdateTrackingStatus(UpdateTrackingStatusRequest) returns (TrackingDataDto);
+  rpc GetTrackingData(TrackingNumberDto) returns (TrackingDataDto);
+  rpc FindAll(google.protobuf.Empty) returns (FindAllResponse);
 }
 
 

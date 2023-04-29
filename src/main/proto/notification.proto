@@ -9,7 +9,8 @@ option java_package = "com.godeltech.grpc.notification";
 option java_multiple_files = true;
 
 message NotificationRequest {
-  user.User user = 1;
+  user.UserDto user_dto = 1;
+  string notification_message = 2;
 }
 
 service NotificationService {
