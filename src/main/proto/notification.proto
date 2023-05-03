@@ -8,11 +8,11 @@ import "user.proto";
 option java_package = "com.godeltech.grpc.notification";
 option java_multiple_files = true;
 
-message NotificationRequest {
+message SendNotificationDto {
   user.UserDto user_dto = 1;
-  string notification_message = 2;
+  string message = 2;
 }
 
 service NotificationService {
-  rpc sendNotification (NotificationRequest) returns (google.protobuf.Empty) {}
+  rpc SendNotification (SendNotificationDto) returns (google.protobuf.Empty) {}
 }
