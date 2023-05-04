@@ -19,7 +19,7 @@ message ParcelDto {
   uint64 user_id = 7;
 }
 
-enum TrackingStatusDto {
+enum TrackingStatus {
   REGISTERED = 0;
   IN_PROGRESS = 1;
   DELIVERED = 2;
@@ -28,11 +28,11 @@ enum TrackingStatusDto {
 
 message TrackingDataDto {
   string tracking_number = 1;
-  repeated TrackingStampDto tracking_data = 2;
+  repeated TrackingStampDto tracking_stamps = 2;
 }
 
 message TrackingStampDto {
-  TrackingStatusDto tracking_status = 1;
+  TrackingStatus tracking_status = 1;
   google.protobuf.Timestamp timestamp = 2;
 }
 
@@ -46,12 +46,13 @@ message CreateParcelDto {
 }
 
 message ParcelDtoList {
-  repeated ParcelDto parcel_dto_list = 1;
+  int32 count = 1;
+  repeated ParcelDto parcel_dtos = 2;
 }
 
 message UpdateTrackingStatusDto {
   string tracking_number = 1;
-  TrackingStatusDto new_status = 2;
+  TrackingStatus new_status = 2;
 }
 
 service ParcelService {

@@ -17,7 +17,8 @@ message UserDto {
 }
 
 message UserListDto {
-  repeated UserDto user_list = 1;
+  int32 count = 1;
+  repeated UserDto user = 2;
 }
 
 message CreateUserDto {
