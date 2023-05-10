@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package parcel;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_package = "com.godeltech.grpc.parcel";
+option java_multiple_files = true;
+
+message ParcelDto {
+  string tracking_number = 1;
+  double weight = 2;
+  double length = 3;
+  double width = 4;
+  double height = 5;
+  string destination = 6;
+  uint64 user_id = 7;
+}
+
+enum TrackingStatus {
+  REGISTERED = 0;
+  IN_PROGRESS = 1;
+  DELIVERED = 2;
+  CANCELLED = 3;
+}
+
+message TrackingDataDto {
+  string tracking_number = 1;
+  repeated TrackingStampDto tracking_stamps = 2;
+}
+
+message TrackingStampDto {
+  TrackingStatus tracking_status = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message CreateParcelDto {
+  double weight = 1;
+  double length = 2;
+  double width = 3;
+  double height = 4;
+  string destination = 5;
+  uint64 user_id = 6;
+}
+
+message ParcelDtoList {
+  int32 count = 1;
+  repeated ParcelDto parcel_dtos = 2;
+}
+
+message UpdateTrackingStatusDto {
+  string tracking_number = 1;
+  TrackingStatus new_status = 2;
+}
+
+service ParcelService {
+  rpc CreateParcel(CreateParcelDto) returns (ParcelDto);
+  rpc FindParcelByTrackingNumber(google.protobuf.StringValue) returns (ParcelDto);
+  rpc DeleteParcelByTrackingNumber(google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc CancelParcelByTrackingNumber(google.protobuf.StringValue) returns (google.protobuf.Empty);
+  rpc UpdateParcel(ParcelDto) returns (ParcelDto);
+  rpc UpdateTrackingStatus(UpdateTrackingStatusDto) returns (TrackingDataDto);
+  rpc GetTrackingDataByTrackingNumber(google.protobuf.StringValue) returns (TrackingDataDto);
+  rpc FindAllParcel(google.protobuf.Empty) returns (ParcelDtoList);
+}
+
+
