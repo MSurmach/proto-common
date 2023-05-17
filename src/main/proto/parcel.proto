@@ -44,7 +44,7 @@ message CreateParcelDto {
   double width = 3 [(validate.rules).double.gt = 0.0];
   double height = 4 [(validate.rules).double.gt = 0.0];
   string destination = 5;
-  user.UserIdDto user_id_dto = 6;
+  uint64 user_id = 6 [(validate.rules).uint64.gte = 1];
 }
 
 message ParcelDtoList {
