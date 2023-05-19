@@ -10,7 +10,7 @@ option java_package = "com.godeltech.grpc.notification";
 option java_multiple_files = true;
 
 message SendNotificationDto {
-  user.UserDto user_dto = 1 [(validate.rules).message.skip = true];
+  user.UserDto user_dto = 1 [(validate.rules).message.skip = false];
   string message = 2;
 }
 
